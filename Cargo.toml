@@ -3,11 +3,11 @@ name = "rest_api"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-actix-web = "4.2.1"
-actix-cors = "0.6.3"
-mongodb = "2.3.1"
-futures = "0.3.25"
-serde = "1.0.147"
+actix-web = "4.2.1"    # 213kB
+actix-cors = "0.6.3"   # 27.5kB
+mongodb = "2.3.1"      # 1530 kB / 1.53 mB
+futures = "0.3.25"     # 51.7kB
+serde = "1.0.147"      # 76.7kB
+
+# Total Dependency Size: 1898.9 kB / 1.8989 mB
