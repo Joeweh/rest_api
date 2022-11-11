@@ -12,6 +12,7 @@ use user_repo::UserRepository;
 use std::env;
 use std::time::Duration;
 use actix_rt::{spawn, time};
+use dotenv::dotenv;
 
 #[get("/api")]
 async fn health_check() -> impl Responder {
@@ -20,7 +21,9 @@ async fn health_check() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let client_options: ClientOptions = ClientOptions::parse(env::var("DB_CONNECTION_STRING")).await.unwrap();
+    dotenv().ok();
+
+    let client_options: ClientOptions = ClientOptions::parse(env::var("DB_CONNECTION_STRING").unwrap()).await.unwrap();
 
     let client: Client = Client::with_options(client_options).unwrap();
 
@@ -34,7 +37,7 @@ async fn main() -> std::io::Result<()> {
         let mut interval = time::interval(Duration::from_secs(300));
         loop {
             interval.tick().await;
-            reqwest::get(env::var("SERVER_PING_URL")).await.unwrap();
+            reqwest::get(env::var("SERVER_PING_URL").unwrap()).await.unwrap();
         }
     });
 
