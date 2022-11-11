@@ -4,10 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-actix-web = "4.2.1"    # 213kB
-actix-cors = "0.6.3"   # 27.5kB
+actix-web = "4.2.1"    # 213  kB
+actix-cors = "0.6.3"   # 27.5 kB
+actix-rt = "2.7.0"     # 20.2 kB
+reqwest = "0.11.12"    # 144  kB
 mongodb = "2.3.1"      # 1530 kB / 1.53 mB
-futures = "0.3.25"     # 51.7kB
-serde = "1.0.147"      # 76.7kB
+futures = "0.3.25"     # 51.7 kB
+serde = "1.0.147"      # 76.7 kB
 
 # Total Dependency Size: 1898.9 kB / 1.8989 mB

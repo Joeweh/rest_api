@@ -10,6 +10,8 @@ use user_controller::{save_user, update_user, delete_user, get_user, get_users};
 use user_repo::UserRepository;
 
 use std::env;
+use std::time::Duration;
+use actix_rt::{spawn, time};
 
 #[get("/api")]
 async fn health_check() -> impl Responder {
@@ -26,6 +28,15 @@ async fn main() -> std::io::Result<()> {
         Ok(port_string) => port_string.parse::<u16>().unwrap(),
         Err(_error) => 8080
     };
+
+    // Ping server periodically to prevent cold starts
+    spawn(async move {
+        let mut interval = time::interval(Duration::from_secs(5 * 60));
+        loop {
+            interval.tick().await;
+            reqwest::get("https://rest-api-sm99.onrender.com/api").await.unwrap();
+        }
+    });
 
     HttpServer::new(move || {
         Cors::permissive();
