@@ -1,5 +1,4 @@
 Improvements
-- Move hardcoded secrets to .env file for security
 - Create repository trait to streamline the creation of future repositories
 - Weigh pros & cons of switching database integration as current db bundle size is questionable
 

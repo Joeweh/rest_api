@@ -20,7 +20,7 @@ async fn health_check() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let client_options: ClientOptions = ClientOptions::parse("mongodb+srv://admin:admin@cluster0.xx20tsi.mongodb.net/?retryWrites=true&w=majority").await.unwrap();
+    let client_options: ClientOptions = ClientOptions::parse(env::var("DB_CONNECTION_STRING")).await.unwrap();
 
     let client: Client = Client::with_options(client_options).unwrap();
 
@@ -31,10 +31,10 @@ async fn main() -> std::io::Result<()> {
 
     // Ping server periodically to prevent cold starts
     spawn(async move {
-        let mut interval = time::interval(Duration::from_secs(5 * 60));
+        let mut interval = time::interval(Duration::from_secs(300));
         loop {
             interval.tick().await;
-            reqwest::get("https://rest-api-sm99.onrender.com/api").await.unwrap();
+            reqwest::get(env::var("SERVER_PING_URL")).await.unwrap();
         }
     });
 
