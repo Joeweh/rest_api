@@ -1,8 +1,24 @@
-use actix_web::{get, web, Responder, HttpResponse, post, put, delete};
+use actix_web::{get, web, Responder, HttpResponse, post, put, delete, HttpRequest};
+use actix_web::http::header;
+use actix_web_httpauth::extractors::basic::BasicAuth;
 
 use crate::user_repo::UserRepository;
 
 use crate::user::{NewUser, User};
+
+#[get("/api/login")]
+pub(crate) async fn login(user_repo: web::Data<UserRepository>, auth: BasicAuth) -> impl Responder {
+    let email = auth.user_id();
+    let password = auth.password().unwrap();
+
+    let result = user_repo.login(email.to_string(), password.to_string()).await;
+
+    if result.is_none() {
+        HttpResponse::NotFound().body("Invalid Credentials");
+    }
+
+    HttpResponse::Ok().json(result.unwrap())
+}
 
 #[get("/api/users")]
 pub(crate) async fn get_users(user_repo: web::Data<UserRepository>) -> impl Responder {

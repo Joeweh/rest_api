@@ -22,7 +22,22 @@ impl UserRepository {
     pub fn new(client: Client) -> Self {
         UserRepository { client }
     }
-    
+
+    pub async fn login(&self, email: String, password: String) -> Option<User> {
+        let database: Database = self.client.database("testDB");
+
+        let collection: Collection<User> = database.collection::<User>("users");
+
+        let result: Result<Option<User>, mongodb::error::Error> = collection.find_one(doc! { "email": email, "password": password }, None).await;
+
+        let user: Option<User> = match result {
+            Ok(option) => option,
+            Err(_err) => None,
+        };
+
+        return user;
+    }
+
     pub async fn get_users(&self) -> Vec<User> {
         let database: Database = self.client.database("testDB");
  
@@ -55,7 +70,9 @@ impl UserRepository {
 
         let user = User {
             _id: ObjectId::new(), 
-            username: new_user.username.to_string()
+            username: new_user.username.to_string(),
+            email: new_user.email.to_string(),
+            password: new_user.password.to_string()
         };
 
         return collection.insert_one(user, None).await.unwrap();
@@ -68,7 +85,9 @@ impl UserRepository {
 
         let user = User {
             _id: ObjectId::from_str(&uid).unwrap(),
-            username: new_user.username.to_string()
+            username: new_user.username.to_string(),
+            email: new_user.email.to_string(),
+            password: new_user.password.to_string()
         };
 
         return collection.replace_one(doc! { "_id": user._id }, user, None).await.unwrap();
