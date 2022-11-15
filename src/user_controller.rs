@@ -1,5 +1,5 @@
-use actix_web::{get, web, Responder, HttpResponse, post, put, delete, HttpRequest};
-use actix_web::http::header;
+use actix_web::{get, web, Responder, HttpResponse, post, put, delete};
+
 use actix_web_httpauth::extractors::basic::BasicAuth;
 
 use crate::user_repo::UserRepository;
